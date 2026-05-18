@@ -4,6 +4,7 @@ import fastifyJwt from "@fastify/jwt";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { AppDataSource } from "./data-source";
+import { healthRoutes } from "./routes/health";
 import { authRoutes } from "./routes/auth";
 import { couponRoutes } from "./routes/coupons";
 import { batchRoutes } from "./routes/batches";
@@ -46,13 +47,7 @@ app.register(fastifySwaggerUi, {
   },
 });
 
-app.get("/api/health", async (request, reply) => {
-  return {
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    database: AppDataSource.isInitialized ? "connected" : "disconnected",
-  };
-});
+app.register(healthRoutes, { prefix: "/api/health" });
 
 app.register(authRoutes, { prefix: "/api/auth" });
 app.register(couponRoutes, { prefix: "/api/coupons" });
