@@ -11,6 +11,7 @@ import { userCouponRoutes } from "./routes/user-coupons";
 import { statsRoutes } from "./routes/stats";
 import { bundleRoutes } from "./routes/bundles";
 import { transferRoutes } from "./routes/transfers";
+import { healthRoutes } from "./routes/health";
 
 const app = fastify({ logger: true });
 
@@ -46,14 +47,7 @@ app.register(fastifySwaggerUi, {
   },
 });
 
-app.get("/api/health", async (request, reply) => {
-  return {
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    database: AppDataSource.isInitialized ? "connected" : "disconnected",
-  };
-});
-
+app.register(healthRoutes, { prefix: "/api/health" });
 app.register(authRoutes, { prefix: "/api/auth" });
 app.register(couponRoutes, { prefix: "/api/coupons" });
 app.register(batchRoutes, { prefix: "/api/batches" });
